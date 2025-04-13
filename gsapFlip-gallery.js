@@ -1,20 +1,30 @@
 // Scroll Trigger Animations
-const sectionTrigger = document.querySelector('#showcase'); // Replace with your section ID
-const elementsToAnimate = document.querySelectorAll('.stickyselector'); // Replace with your target elements
+const showcaseSection = document.querySelector('#showcase'); // Replace with your section ID
+const stickyReveal = document.querySelectorAll('.stickyselector');
+const toggleReveal = document.querySelectorAll('.viewtoggle');
 
-gsap.to(elementsToAnimate, {
+const scrollTimeline = gsap.timeline({
   scrollTrigger: {
-    trigger: sectionTrigger,
-    start: "top center", // When the top of the section hits the center of the viewport
-    end: "bottom center", // When the bottom of the section hits the center of the viewport
-    scrub: true, // Makes the animation progress based on scroll position
-    markers: true // Set to true for debugging
-  },
-  y: 100, // Adjust these values based on your desired animation
-  opacity: 0.5,
-  duration: 1,
-  ease: "none" // Using "none" since we're scrubbing
+    trigger: showcaseSection,
+    start: "top center",
+    end: "bottom center",
+    scrub: true,
+    markers: true
+  }
 });
+
+// Add animations to the timeline
+scrollTimeline
+  .fromTo(stickyReveal, {
+    display: "none",
+  }, {
+    display: "block",
+  })
+  .fromTo(toggleReveal, {
+    y: "150%"
+  }, {
+    y: "0%",
+  }, "<"); // The "<" makes this animation start at the same time as the previous one
 
 // Call implicated DOM Elements
 const viewToggle = document.querySelector('[data-element="view-toggle"]');
@@ -52,8 +62,8 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => {},
-      onUpdate: function (progress) {},
+      onStart: () => { },
+      onUpdate: function (progress) { },
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -78,7 +88,7 @@ viewToggle.addEventListener("click", () => {
             //   ease: "Easing-1",
             // });
           },
-          onComplete: () => {},
+          onComplete: () => { },
         });
       },
     });
@@ -121,7 +131,7 @@ viewToggle.addEventListener("click", () => {
           duration: 0.9,
           ease: "Easing-1",
           absolute: true,
-          onStart: () => {},
+          onStart: () => { },
           onComplete: () => {
             // gsap.to(".stickyselector", {
             //   position: "sticky",
