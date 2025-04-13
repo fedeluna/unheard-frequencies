@@ -1,20 +1,19 @@
 // Scroll Trigger Animations
-const scrollElements = document.querySelectorAll('.stickyselector');
+const sectionTrigger = document.querySelector('#showcase'); // Replace with your section ID
+const elementsToAnimate = document.querySelectorAll('.stickyselector'); // Replace with your target elements
 
-scrollElements.forEach(element => {
-  gsap.from(element, {
-    scrollTrigger: {
-      trigger: element,
-      start: "top 80%", // When the top of the element hits 80% of the viewport
-      end: "bottom 20%", // When the bottom of the element hits 20% of the viewport
-      toggleActions: "play none none reverse", // play, pause, resume, reverse, restart, reset, complete, none
-      markers: false // Set to true for debugging
-    },
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    ease: "power2.out"
-  });
+gsap.to(elementsToAnimate, {
+  scrollTrigger: {
+    trigger: sectionTrigger,
+    start: "top center", // When the top of the section hits the center of the viewport
+    end: "bottom center", // When the bottom of the section hits the center of the viewport
+    scrub: true, // Makes the animation progress based on scroll position
+    markers: false // Set to true for debugging
+  },
+  y: -100, // Adjust these values based on your desired animation
+  opacity: 1,
+  duration: 1,
+  ease: "none" // Using "none" since we're scrubbing
 });
 
 // Call implicated DOM Elements
