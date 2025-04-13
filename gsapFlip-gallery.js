@@ -1,9 +1,30 @@
+// Scroll Trigger Animations
+const scrollElements = document.querySelectorAll('.stickyselector');
+
+scrollElements.forEach(element => {
+  gsap.from(element, {
+    scrollTrigger: {
+      trigger: element,
+      start: "top 80%", // When the top of the element hits 80% of the viewport
+      end: "bottom 20%", // When the bottom of the element hits 20% of the viewport
+      toggleActions: "play none none reverse", // play, pause, resume, reverse, restart, reset, complete, none
+      markers: false // Set to true for debugging
+    },
+    y: 50,
+    opacity: 0,
+    duration: 1,
+    ease: "power2.out"
+  });
+});
+
 // Call implicated DOM Elements
 const viewToggle = document.querySelector('[data-element="view-toggle"]');
 const itemsToAnimate = document.querySelectorAll("[data-view]");
 
 // Easings Configuration
 CustomEase.create("Easing-1", "0.37, 0.14, 0.02, 0.99");
+
+// Sticky Selector Reveal animation
 
 // State Management
 let isInGalleryView = false;
