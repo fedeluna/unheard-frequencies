@@ -8,10 +8,10 @@ gsap.to(elementsToAnimate, {
     start: "top center", // When the top of the section hits the center of the viewport
     end: "bottom center", // When the bottom of the section hits the center of the viewport
     scrub: true, // Makes the animation progress based on scroll position
-    markers: false // Set to true for debugging
+    markers: true // Set to true for debugging
   },
-  y: -100, // Adjust these values based on your desired animation
-  opacity: 1,
+  y: 100, // Adjust these values based on your desired animation
+  opacity: 0.5,
   duration: 1,
   ease: "none" // Using "none" since we're scrubbing
 });
