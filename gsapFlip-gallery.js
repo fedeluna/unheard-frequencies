@@ -10,6 +10,25 @@ const showcaseSection = document.querySelector("#showcase"); // Replace with you
 const stickyReveal = document.querySelectorAll(".stickyselector");
 const toggleReveal = document.querySelectorAll(".viewtoggle");
 
+// Function to check if element is in viewport
+function isInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return rect.top <= window.innerHeight && rect.bottom >= 0;
+}
+
+// Set initial state based on viewport visibility
+function setInitialState() {
+  if (isInViewport(showcaseSection)) {
+    gsap.set(stickyReveal, { display: "block" });
+    gsap.set(toggleReveal, { y: "0%" });
+  } else {
+    gsap.set(stickyReveal, { display: "none" });
+    gsap.set(toggleReveal, { y: "150%" });
+  }
+}
+
+// Set initial state on load
+setInitialState();
 
 // Create timeline for the enter animation
 const enterTimeline = gsap.timeline({
@@ -18,7 +37,9 @@ const enterTimeline = gsap.timeline({
     start: "top bottom-=20%",
     end: "top+=10% bottom-=20%",
     scrub: true,
-  }
+    invalidateOnRefresh: true,
+    onRefresh: setInitialState,
+  },
 });
 
 // Create timeline for the leave animation
@@ -26,9 +47,10 @@ const leaveTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
     start: "bottom bottom-=10%",
-    end: "bottom center-=10%",
+    end: "bottom center+=10%",
     scrub: true,
-  }
+    invalidateOnRefresh: true,
+  },
 });
 
 // Add animations to the enter timeline
@@ -36,10 +58,10 @@ enterTimeline
   .fromTo(
     stickyReveal,
     {
-      display: "none"
+      display: "none",
     },
     {
-      display: "block"
+      display: "block",
     }
   )
   .fromTo(
@@ -58,10 +80,10 @@ leaveTimeline
   .fromTo(
     stickyReveal,
     {
-      display: "block"
+      display: "block",
     },
     {
-      display: "none"
+      display: "none",
     }
   )
   .fromTo(
@@ -99,11 +121,31 @@ let isInGalleryView = false;
 viewToggle.addEventListener("click", () => {
   const animationsOnClick = gsap.timeline();
 
+  gsap.to(".switch-bg", {
+    x: "100%",
+    backgroundColor: "#f63b2e",
+    duration: 0.45,
+    ease: "Easing-1",
+  });
+
+  gsap.to("[button-grid]", {
+    color: "#F63B2E",
+    opacity: 0.75,
+    duration: 0.45,
+    ease: "Easing-1",
+  });
+
+  gsap.to("[button-gallery]", {
+    color: "#0B0E0B",
+    opacity: 1,
+    duration: 0.45,
+    ease: "Easing-1",
+  });
+
   if (!isInGalleryView) {
     animationsOnClick
       .to(".productinfo", { y: "-100%", opacity: 0 }, 0)
       .to(".product-imgwrap", { borderStyle: "none" }, 0)
-      // .to(".stickyselector", { position: "fixed", bottom: "1em" }, 0)
       .to(".thumbselector", { y: 0 }, 0)
       .to(".showcasecopy", { opacity: 0, display: "none" }, 0)
       .to(".navbottom", { opacity: 0, display: "none" }, 0);
@@ -118,8 +160,8 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => { },
-      onUpdate: function (progress) { },
+      onStart: () => {},
+      onUpdate: function (progress) {},
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -138,23 +180,45 @@ viewToggle.addEventListener("click", () => {
           ease: "Easing-1",
           absolute: true,
           onStart: () => {
-            // gsap.to(".stickyselector", {
-            //   scale: 1.1,
-            //   duration: 0.8,
-            //   ease: "Easing-1",
-            // });
+            gsap.to(".stickyselector", {
+              scaleX: 1,
+              scaleY: 1,
+              scaleZ: 1,
+              duration: 0.8,
+              ease: "Easing-1",
+            });
           },
-          onComplete: () => { },
+          onComplete: () => {},
         });
       },
     });
   } else {
     // Gallery view to initial state animations
 
+    gsap.to(".switch-bg", {
+      x: "0%",
+      backgroundColor: "#FAEDD1",
+      duration: 0.45,
+      ease: "Easing-1",
+    });
+  
+    gsap.to("[button-grid]", {
+      color: "#0B0E0B",
+      opacity: 1,
+      duration: 0.45,
+      ease: "Easing-1",
+    });
+  
+    gsap.to("[button-gallery]", {
+      color: "#FAEDD1",
+      opacity: 0.75,
+      duration: 0.45,
+      ease: "Easing-1",
+    });
+
     animationsOnClick
       .to(".productinfo", { y: "0%", opacity: 1 }, 0)
       .to(".product-imgwrap", { borderStyle: "solid" }, 0)
-      // .to(".stickyselector", { scale: 1.35, bottom: "1.5em" }, 0)
       .to(".thumbselector", { y: "-320%" }, 0)
       .to(".showcasecopy", { opacity: 1, display: "flex" }, 0)
       .to(".navbottom", { opacity: 1, display: "flex" }, 0);
@@ -187,14 +251,16 @@ viewToggle.addEventListener("click", () => {
           duration: 0.9,
           ease: "Easing-1",
           absolute: true,
-          onStart: () => { },
-          onComplete: () => {
-            // gsap.to(".stickyselector", {
-            //   position: "sticky",
-            //   duration: 0.5,
-            //   ease: "Easing-1",
-            // });
+          onStart: () => {
+            gsap.to(".stickyselector", {
+              scaleX: 1.35,
+              scaleY: 1.35,
+              scaleZ: 1,
+              duration: 0.8,
+              ease: "Easing-1",
+            });
           },
+          onComplete: () => {},
         });
       },
     });
