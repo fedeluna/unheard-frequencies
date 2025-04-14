@@ -1,30 +1,31 @@
-// Scroll Trigger Animations
+//
+//
+// Reveal Animation fix for sticky selector
 const showcaseSection = document.querySelector("#showcase"); // Replace with your section ID
 const stickyReveal = document.querySelectorAll(".stickyselector");
 const toggleReveal = document.querySelectorAll(".viewtoggle");
 
-gsap.to(stickyReveal, { display: "none", immediateRender: true });
+// Set initial state on page load
+gsap.set(stickyReveal, { display: "none", immediateRender: true });
 
 // Create timeline for the enter animation
 const enterTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
     start: "top bottom-=20%",
-    end: "top+=10% bottom-=20%",
+    end: "top+=15% center",
     scrub: true,
-    markers: false,
-  },
+  }
 });
 
 // Create timeline for the leave animation
 const leaveTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
-    start: "bottom bottom-=10%",
-    end: "bottom center+=10%",
+    start: "bottom-=20% bottom",
+    end: "bottom center",
     scrub: true,
-    markers: true,
-  },
+  }
 });
 
 // Add animations to the enter timeline
@@ -32,10 +33,12 @@ enterTimeline
   .fromTo(
     stickyReveal,
     {
-      display: "none",
+      opacity: 0,
+      visibility: "hidden"
     },
     {
-      display: "block",
+      opacity: 1,
+      visibility: "visible"
     }
   )
   .fromTo(
@@ -54,10 +57,12 @@ leaveTimeline
   .fromTo(
     stickyReveal,
     {
-      display: "block",
+      opacity: 1,
+      visibility: "visible"
     },
     {
-      display: "none",
+      opacity: 0,
+      visibility: "hidden"
     }
   )
   .fromTo(
@@ -70,6 +75,14 @@ leaveTimeline
     },
     "<"
   );
+
+//
+//
+//
+//
+//
+
+// GSAP FLIP GALLERY
 
 // Call implicated DOM Elements
 const viewToggle = document.querySelector('[data-element="view-toggle"]');
@@ -107,8 +120,8 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => {},
-      onUpdate: function (progress) {},
+      onStart: () => { },
+      onUpdate: function (progress) { },
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -133,7 +146,7 @@ viewToggle.addEventListener("click", () => {
             //   ease: "Easing-1",
             // });
           },
-          onComplete: () => {},
+          onComplete: () => { },
         });
       },
     });
@@ -176,7 +189,7 @@ viewToggle.addEventListener("click", () => {
           duration: 0.9,
           ease: "Easing-1",
           absolute: true,
-          onStart: () => {},
+          onStart: () => { },
           onComplete: () => {
             // gsap.to(".stickyselector", {
             //   position: "sticky",
