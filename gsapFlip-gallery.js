@@ -1,30 +1,75 @@
 // Scroll Trigger Animations
-const showcaseSection = document.querySelector('#showcase'); // Replace with your section ID
-const stickyReveal = document.querySelectorAll('.stickyselector');
-const toggleReveal = document.querySelectorAll('.viewtoggle');
+const showcaseSection = document.querySelector("#showcase"); // Replace with your section ID
+const stickyReveal = document.querySelectorAll(".stickyselector");
+const toggleReveal = document.querySelectorAll(".viewtoggle");
 
-const scrollTimeline = gsap.timeline({
+gsap.to(stickyReveal, { display: "none", immediateRender: true });
+
+// Create timeline for the enter animation
+const enterTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
-    start: "top center",
-    end: "bottom center",
+    start: "top bottom-=20%",
+    end: "top+=10% bottom-=20%",
     scrub: true,
-    markers: true
-  }
+    markers: false,
+  },
 });
 
-// Add animations to the timeline
-scrollTimeline
-  .fromTo(stickyReveal, {
-    display: "none",
-  }, {
-    display: "block",
-  })
-  .fromTo(toggleReveal, {
-    y: "150%"
-  }, {
-    y: "0%",
-  }, "<"); // The "<" makes this animation start at the same time as the previous one
+// Create timeline for the leave animation
+const leaveTimeline = gsap.timeline({
+  scrollTrigger: {
+    trigger: showcaseSection,
+    start: "bottom bottom-=10%",
+    end: "bottom center+=10%",
+    scrub: true,
+    markers: true,
+  },
+});
+
+// Add animations to the enter timeline
+enterTimeline
+  .fromTo(
+    stickyReveal,
+    {
+      display: "none",
+    },
+    {
+      display: "block",
+    }
+  )
+  .fromTo(
+    toggleReveal,
+    {
+      y: "150%",
+    },
+    {
+      y: "0%",
+    },
+    "<"
+  );
+
+// Add animations to the leave timeline
+leaveTimeline
+  .fromTo(
+    stickyReveal,
+    {
+      display: "block",
+    },
+    {
+      display: "none",
+    }
+  )
+  .fromTo(
+    toggleReveal,
+    {
+      y: "0%",
+    },
+    {
+      y: "150%",
+    },
+    "<"
+  );
 
 // Call implicated DOM Elements
 const viewToggle = document.querySelector('[data-element="view-toggle"]');
@@ -62,8 +107,8 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => { },
-      onUpdate: function (progress) { },
+      onStart: () => {},
+      onUpdate: function (progress) {},
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -88,7 +133,7 @@ viewToggle.addEventListener("click", () => {
             //   ease: "Easing-1",
             // });
           },
-          onComplete: () => { },
+          onComplete: () => {},
         });
       },
     });
@@ -131,7 +176,7 @@ viewToggle.addEventListener("click", () => {
           duration: 0.9,
           ease: "Easing-1",
           absolute: true,
-          onStart: () => { },
+          onStart: () => {},
           onComplete: () => {
             // gsap.to(".stickyselector", {
             //   position: "sticky",
