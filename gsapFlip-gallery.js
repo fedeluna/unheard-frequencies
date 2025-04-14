@@ -1,6 +1,11 @@
 //
 //
-// Reveal Animation fix for sticky selector
+//
+//
+//
+
+// FIX FOR STICKY SELECTOR REVEAL
+
 const showcaseSection = document.querySelector("#showcase"); // Replace with your section ID
 const stickyReveal = document.querySelectorAll(".stickyselector");
 const toggleReveal = document.querySelectorAll(".viewtoggle");
@@ -84,7 +89,6 @@ leaveTimeline
 
 // GSAP FLIP GALLERY
 
-// Call implicated DOM Elements
 const viewToggle = document.querySelector('[data-element="view-toggle"]');
 const itemsToAnimate = document.querySelectorAll("[data-view]");
 
