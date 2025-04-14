@@ -10,15 +10,13 @@ const showcaseSection = document.querySelector("#showcase"); // Replace with you
 const stickyReveal = document.querySelectorAll(".stickyselector");
 const toggleReveal = document.querySelectorAll(".viewtoggle");
 
-// Set initial state on page load
-gsap.set(stickyReveal, { display: "none", immediateRender: true });
 
 // Create timeline for the enter animation
 const enterTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
     start: "top bottom-=20%",
-    end: "top+=15% center",
+    end: "top+=10% bottom-=20%",
     scrub: true,
   }
 });
@@ -27,8 +25,8 @@ const enterTimeline = gsap.timeline({
 const leaveTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
-    start: "bottom-=20% bottom",
-    end: "bottom center",
+    start: "bottom bottom-=10%",
+    end: "bottom center-=10%",
     scrub: true,
   }
 });
@@ -38,12 +36,10 @@ enterTimeline
   .fromTo(
     stickyReveal,
     {
-      opacity: 0,
-      visibility: "hidden"
+      display: "none"
     },
     {
-      opacity: 1,
-      visibility: "visible"
+      display: "block"
     }
   )
   .fromTo(
@@ -62,12 +58,10 @@ leaveTimeline
   .fromTo(
     stickyReveal,
     {
-      opacity: 1,
-      visibility: "visible"
+      display: "block"
     },
     {
-      opacity: 0,
-      visibility: "hidden"
+      display: "none"
     }
   )
   .fromTo(
