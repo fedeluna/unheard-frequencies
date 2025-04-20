@@ -1,22 +1,31 @@
-//
-//
-//
-//
-//
+// =============================================
+// CONFIGURATION & CONSTANTS
+// =============================================
+
+// Easings Configuration
+CustomEase.create("Easing-1", "0.37, 0.14, 0.02, 0.99");
+
+// State Management
+let isInGalleryView = false;
+
+// DOM Elements
+const showcaseSection = document.querySelector("#showcase");
+const stickyReveal = document.querySelectorAll(".stickyselector");
+const toggleReveal = document.querySelectorAll(".viewtoggle");
+const viewToggle = document.querySelector('[data-element="view-toggle"]');
+const itemsToAnimate = document.querySelectorAll("[data-view]");
+
+// =============================================
+// UTILITY FUNCTIONS
+// =============================================
 
 // FIX FOR STICKY SELECTOR REVEAL
 
-const showcaseSection = document.querySelector("#showcase"); // Replace with your section ID
-const stickyReveal = document.querySelectorAll(".stickyselector");
-const toggleReveal = document.querySelectorAll(".viewtoggle");
-
-// Function to check if element is in viewport
 function isInViewport(element) {
   const rect = element.getBoundingClientRect();
   return rect.top <= window.innerHeight && rect.bottom >= 0;
 }
 
-// Set initial state based on viewport visibility
 function setInitialState() {
   if (isInViewport(showcaseSection)) {
     gsap.set(stickyReveal, { display: "block" });
@@ -27,10 +36,14 @@ function setInitialState() {
   }
 }
 
-// Set initial state on load
-setInitialState();
+// =============================================
+// SECONDARY ELEMENTS - ANIMATION TIMELINES
+// =============================================
 
-// Create timeline for the enter animation
+//
+//
+// Sticky Selector Reveal animation
+
 const enterTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
@@ -42,7 +55,6 @@ const enterTimeline = gsap.timeline({
   },
 });
 
-// Create timeline for the leave animation
 const leaveTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: showcaseSection,
@@ -53,7 +65,10 @@ const leaveTimeline = gsap.timeline({
   },
 });
 
+//
+//
 // Add animations to the enter timeline
+
 enterTimeline
   .fromTo(
     stickyReveal,
@@ -76,6 +91,7 @@ enterTimeline
   );
 
 // Add animations to the leave timeline
+
 leaveTimeline
   .fromTo(
     stickyReveal,
@@ -97,56 +113,44 @@ leaveTimeline
     "<"
   );
 
-//
-//
-//
-//
-//
+// =============================================
+// MAIN - EVENT LISTENERS & INITIALIZATION
+// =============================================
 
-// GSAP FLIP GALLERY
-
-const viewToggle = document.querySelector('[data-element="view-toggle"]');
-const itemsToAnimate = document.querySelectorAll("[data-view]");
-
-// Easings Configuration
-CustomEase.create("Easing-1", "0.37, 0.14, 0.02, 0.99");
-
-// Sticky Selector Reveal animation
-
-// State Management
-let isInGalleryView = false;
+// Set initial state on load
+setInitialState();
 
 // Grid - Gallery Switch
-
 viewToggle.addEventListener("click", () => {
   const animationsOnClick = gsap.timeline();
 
+  // Switch button animations
   gsap.to(".switch-bg", {
-    x: "100%",
-    backgroundColor: "#f63b2e",
+    x: isInGalleryView ? "0%" : "100%",
+    backgroundColor: isInGalleryView ? "#FAEDD1" : "#f63b2e",
     duration: 0.45,
     ease: "Easing-1",
   });
 
   gsap.to("[button-grid]", {
-    color: "#F63B2E",
-    opacity: 0.75,
+    color: isInGalleryView ? "#0B0E0B" : "#F63B2E",
+    opacity: isInGalleryView ? 1 : 0.75,
     duration: 0.45,
     ease: "Easing-1",
   });
 
   gsap.to("[button-gallery]", {
-    color: "#0B0E0B",
-    opacity: 1,
+    color: isInGalleryView ? "#FAEDD1" : "#0B0E0B",
+    opacity: isInGalleryView ? 0.75 : 1,
     duration: 0.45,
     ease: "Easing-1",
   });
 
   if (!isInGalleryView) {
+    // Grid to Gallery animations
     animationsOnClick
       .to(".productinfo", { y: "-100%", opacity: 0 }, 0)
       .to(".product-imgwrap", { borderStyle: "none" }, 0)
-      .to(".thumbselector", { y: 0 }, 0)
       .to(".showcasecopy", { opacity: 0, display: "none" }, 0)
       .to(".navbottom", { opacity: 0, display: "none" }, 0);
 
@@ -160,8 +164,6 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => {},
-      onUpdate: function (progress) {},
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -188,38 +190,14 @@ viewToggle.addEventListener("click", () => {
               ease: "Easing-1",
             });
           },
-          onComplete: () => {},
         });
       },
     });
   } else {
-    // Gallery view to initial state animations
-
-    gsap.to(".switch-bg", {
-      x: "0%",
-      backgroundColor: "#FAEDD1",
-      duration: 0.45,
-      ease: "Easing-1",
-    });
-  
-    gsap.to("[button-grid]", {
-      color: "#0B0E0B",
-      opacity: 1,
-      duration: 0.45,
-      ease: "Easing-1",
-    });
-  
-    gsap.to("[button-gallery]", {
-      color: "#FAEDD1",
-      opacity: 0.75,
-      duration: 0.45,
-      ease: "Easing-1",
-    });
-
+    // Gallery to Grid animations
     animationsOnClick
       .to(".productinfo", { y: "0%", opacity: 1 }, 0)
       .to(".product-imgwrap", { borderStyle: "solid" }, 0)
-      .to(".thumbselector", { y: "-320%" }, 0)
       .to(".showcasecopy", { opacity: 1, display: "flex" }, 0)
       .to(".navbottom", { opacity: 1, display: "flex" }, 0);
 
@@ -260,7 +238,6 @@ viewToggle.addEventListener("click", () => {
               ease: "Easing-1",
             });
           },
-          onComplete: () => {},
         });
       },
     });
