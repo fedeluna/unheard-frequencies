@@ -146,6 +146,16 @@ viewToggle.addEventListener("click", () => {
     ease: "Easing-1",
   });
 
+  // Thumbs selector animations
+  gsap.to(".thumbselector", {
+    marginTop: isInGalleryView ? "-100%" : "0%",
+    opacity: isInGalleryView ? 0 : 1,
+    duration: 0.45,
+    ease: "Easing-1",
+  });
+
+  gsap.to(".cardthumb", { overflow: isInGalleryView ? "hidden" : "visible" });
+
   if (!isInGalleryView) {
     // Grid to Gallery animations
     animationsOnClick
@@ -154,8 +164,8 @@ viewToggle.addEventListener("click", () => {
       .to(".showcasecopy", { opacity: 0, display: "none" }, 0)
       .to(".navbottom", { opacity: 0, display: "none" }, 0);
 
+    // First Flip animation
     const gridState = Flip.getState(itemsToAnimate);
-
     itemsToAnimate.forEach((item) => {
       item.classList.add("transition");
     });
@@ -164,6 +174,7 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
+      onStart: () => {},
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
