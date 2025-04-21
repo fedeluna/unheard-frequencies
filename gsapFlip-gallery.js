@@ -1,14 +1,15 @@
 // =============================================
-// CONFIGURATION & CONSTANTS
+// CONFIGURATION & CONSTS
 // =============================================
 
 // Easings Configuration
 CustomEase.create("Easing-1", "0.37, 0.14, 0.02, 0.99");
 
-// State Management
+// State Management -> False = Grid View, True = Gallery View
 let isInGalleryView = false;
 
 // DOM Elements
+
 const showcaseSection = document.querySelector("#showcase");
 const stickyReveal = document.querySelectorAll(".stickyselector");
 const toggleReveal = document.querySelectorAll(".viewtoggle");
@@ -16,10 +17,10 @@ const viewToggle = document.querySelector('[data-element="view-toggle"]');
 const itemsToAnimate = document.querySelectorAll("[data-view]");
 
 // =============================================
-// UTILITY FUNCTIONS
+// STICKY SELECTOR
 // =============================================
 
-// FIX FOR STICKY SELECTOR REVEAL
+// Fix for Sticky Selector Reveal
 
 function isInViewport(element) {
   const rect = element.getBoundingClientRect();
@@ -36,12 +37,6 @@ function setInitialState() {
   }
 }
 
-// =============================================
-// SECONDARY ELEMENTS - ANIMATION TIMELINES
-// =============================================
-
-//
-//
 // Sticky Selector Reveal animation
 
 const enterTimeline = gsap.timeline({
@@ -65,10 +60,6 @@ const leaveTimeline = gsap.timeline({
   },
 });
 
-//
-//
-// Add animations to the enter timeline
-
 enterTimeline
   .fromTo(
     stickyReveal,
@@ -89,8 +80,6 @@ enterTimeline
     },
     "<"
   );
-
-// Add animations to the leave timeline
 
 leaveTimeline
   .fromTo(
@@ -121,10 +110,12 @@ leaveTimeline
 setInitialState();
 
 // Grid - Gallery Switch
+
 viewToggle.addEventListener("click", () => {
   const animationsOnClick = gsap.timeline();
 
   // Switch button animations
+  
   gsap.to(".switch-bg", {
     x: isInGalleryView ? "0%" : "100%",
     backgroundColor: isInGalleryView ? "#FAEDD1" : "#f63b2e",
@@ -147,6 +138,7 @@ viewToggle.addEventListener("click", () => {
   });
 
   // Thumbs selector animations
+
   gsap.to(".thumbselector", {
     marginTop: isInGalleryView ? "-100%" : "0%",
     opacity: isInGalleryView ? 0 : 1,
@@ -155,6 +147,8 @@ viewToggle.addEventListener("click", () => {
   });
 
   gsap.to(".cardthumb", { overflow: isInGalleryView ? "hidden" : "visible" });
+
+  //
 
   if (!isInGalleryView) {
     // Grid to Gallery animations
@@ -174,7 +168,7 @@ viewToggle.addEventListener("click", () => {
       duration: 0.45,
       ease: "Easing-1",
       absolute: true,
-      onStart: () => {},
+      onStart: () => { },
       onComplete: () => {
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -200,6 +194,22 @@ viewToggle.addEventListener("click", () => {
               duration: 0.8,
               ease: "Easing-1",
             });
+
+            //
+            // Flip animation for card thumbnails
+            const thumbState = Flip.getState(".cardthumb");
+
+            document.querySelectorAll(".cardthumb").forEach((thumb) => {
+              thumb.classList.add("relative");
+            });
+
+            Flip.from(thumbState, {
+              duration: 0.45,
+              ease: "Easing-1",
+            });
+
+            //
+            //
           },
         });
       },
