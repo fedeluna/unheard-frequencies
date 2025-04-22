@@ -115,7 +115,6 @@ viewToggle.addEventListener("click", () => {
   const animationsOnClick = gsap.timeline();
 
   // Switch button animations
-
   gsap.to(".switch-bg", {
     x: isInGalleryView ? "0%" : "100%",
     backgroundColor: isInGalleryView ? "#FAEDD1" : "#f63b2e",
@@ -144,7 +143,7 @@ viewToggle.addEventListener("click", () => {
     ease: "Easing-1",
   });
 
-  //
+  gsap.to(".cardthumb", { overflow: isInGalleryView ? "hidden" : "visible" });
 
   if (!isInGalleryView) {
     // Grid to Gallery animations
@@ -152,7 +151,7 @@ viewToggle.addEventListener("click", () => {
       .to(".productinfo", { y: "-100%", opacity: 0 }, 0)
       .to(".product-imgwrap", { borderStyle: "none" }, 0)
       .to(".showcasecopy", { opacity: 0, display: "none" }, 0)
-      .to(".navbottom", { opacity: 0, display: "none" }, 0)
+      .to(".navbottom", { opacity: 0, display: "none" }, 0);
 
     // First Flip animation
     const gridState = Flip.getState(itemsToAnimate);
@@ -167,8 +166,25 @@ viewToggle.addEventListener("click", () => {
       onStart: () => {
       },
       onComplete: () => {
+        // Flip animation for card thumbnails
+        const cardThumbState = Flip.getState(".cardthumb");
+        document.querySelectorAll(".cardthumb").forEach((item) => {
+          item.classList.add("relative");
+        });
 
-        gsap.to(".thumbscontainer", { overflow: "visible" }, 0);
+        gsap.to(".cardthumb", {
+          opacity: 1,
+          duration: 0.45,
+          ease: "Easing-1",
+        });
+
+        Flip.from(cardThumbState, {
+          duration: 0.45,
+          ease: "Easing-1",
+          onComplete: () => {
+            gsap.to(".thumbscontainer", { overflow: "visible" }, 0);
+          }
+        });
 
         const transitionState = Flip.getState(itemsToAnimate);
 
@@ -194,27 +210,7 @@ viewToggle.addEventListener("click", () => {
               duration: 0.8,
               ease: "Easing-1",
             });
-
-            // Flip animation for card thumbnails
-
-            const thumbState = Flip.getState(".cardthumb");
-
-            document.querySelectorAll(".cardthumb").forEach((thumb) => {
-              thumb.classList.add("relative");
-            });
-
-            gsap.from(".cardthumb", {
-              opacity: 0,
-              duration: 0.45,
-              ease: "Easing-1",
-            });
-
-            Flip.from(thumbState, {
-              duration: 0.8,
-              ease: "Easing-1",
-            });
-
-          },
+          }
         });
       },
     });
@@ -234,7 +230,6 @@ viewToggle.addEventListener("click", () => {
 
     // Flip animation for card thumbnails
     const cardThumbState = Flip.getState(".cardthumb");
-
     document.querySelectorAll(".cardthumb").forEach((item) => {
       item.classList.remove("relative");
     });
@@ -242,17 +237,19 @@ viewToggle.addEventListener("click", () => {
     gsap.to(".cardthumb", {
       opacity: 0,
       duration: 0.45,
-      ease: "Easing-1"
+      ease: "Easing-1",
     });
 
     Flip.from(cardThumbState, {
       duration: 0.45,
       ease: "Easing-1",
-      absolute: true
+      absolute: true,
+      onComplete: () => {
+        gsap.to(".thumbscontainer", { overflow: "hidden" }, 0);
+      }
     });
 
     const gridState = Flip.getState(itemsToAnimate);
-
     itemsToAnimate.forEach((item) => {
       item.classList.remove("gallery");
     });
@@ -269,10 +266,7 @@ viewToggle.addEventListener("click", () => {
         });
       },
       onComplete: () => {
-        gsap.to(".thumbscontainer", { overflow: "hidden" }, 0)
-
         const transitionState = Flip.getState(itemsToAnimate);
-
         itemsToAnimate.forEach((item) => {
           item.classList.remove("transition");
         });
@@ -288,7 +282,7 @@ viewToggle.addEventListener("click", () => {
               scaleZ: 1,
               duration: 0.8,
               ease: "Easing-1",
-            })
+            });
           },
         });
       },
